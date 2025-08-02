@@ -88,6 +88,31 @@ form button {
   cursor: pointer;
 }
 
+img {
+  -webkit-user-drag: none;
+  user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+  pointer-events: none; /* disables clicks and right-click */
+}
+
+body {
+  -webkit-touch-callout: none; /* disables callout on iOS */
+}
+
+.gallery {
+  position: relative;
+}
+
+.photo-item::after {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  /* Transparent overlay to block clicks */
+  background: transparent;
+}
+
+
 form button:hover {
   background: #0288d1;
 }
