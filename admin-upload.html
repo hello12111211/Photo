@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Photo Upload</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <nav>
+    <a href="index.html">Home</a>
+    <a href="gallery.html">Gallery</a>
+  </nav>
+
+  <section class="gallery">
+    <h2>Upload New Photo</h2>
+    <form id="uploadForm">
+      <input type="file" id="photoInput" accept="image/*" required />
+      <input type="text" id="captionInput" placeholder="Enter photo caption" required />
+      <select id="categoryInput">
+        <option value="planes">Planes</option>
+        <option value="scenery">Scenery</option>
+        <option value="animals">Animals</option>
+      </select>
+      <button type="submit">Upload</button>
+    </form>
+
+    <h3>Preview</h3>
+    <div id="previewArea" class="photo-grid"></div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Olivia Daly Photography</p>
+  </footer>
+
+  <script>
+    const form = document.getElementById('uploadForm');
+    const previewArea = document.getElementById('previewArea');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const fileInput = document.getElementById('photoInput');
+      const caption = document.getElementById('captionInput').value;
+      const category = document.getElementById('categoryInput').value;
+      const file = fileInput.files[0];
+
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function() {
+        const imgURL = reader.result;
+
+        const photoDiv = document.createElement('div');
+        photoDiv.className = 'photo-item';
+        photoDiv.dataset.caption = caption.toLowerCase();
+        photoDiv.dataset.category = category;
+
+        photoDiv.innerHTML = `
+          <img src="${imgURL}" alt="Uploaded photo">
+          <p>${caption} (${category})</p>
+        `;
+
+        previewArea.appendChild(photoDiv);
+
+        // Reset the form
+        form.reset();
+      };
+      reader.readAsDataURL(file);
+    });
+  </script>
+</body>
+</html>
