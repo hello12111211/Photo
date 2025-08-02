@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Olivia Daly Photography</title>
+  <link rel="stylesheet" href="style.css">
+  <script>
+    const photos = [
+      { src: 'plane1.jpg', caption: 'Jet flying at sunset', category: 'planes' },
+      { src: 'plane2.jpg', caption: 'Vintage aircraft at airshow', category: 'planes' },
+      { src: 'scene1.jpg', caption: 'Mountain view sunrise', category: 'scenery' },
+      { src: 'animal1.jpg', caption: 'Tiger in the wild', category: 'animals' },
+      { src: 'scene2.jpg', caption: 'Lake and forest reflection', category: 'scenery' },
+      { src: 'animal2.jpg', caption: 'Bird perched on a branch', category: 'animals' }
+    ];
+
+    function showSection(id) {
+      document.querySelectorAll('.bio-box, .gallery, .contact, .feedback, .checkout').forEach(sec => sec.style.display = 'none');
+      document.getElementById(id).style.display = 'block';
+      if (id === 'gallery') renderGallery();
+    }
+
+    function renderGallery() {
+      const container = document.getElementById('photo-grid');
+      const category = document.getElementById('filter-category').value;
+      const search = document.getElementById('search-box').value.toLowerCase();
+      container.innerHTML = '';
+      photos.filter(photo => {
+        return (category === 'all' || photo.category === category) && photo.caption.toLowerCase().includes(search);
+      }).forEach(photo => {
+        const div = document.createElement('div');
+        div.className = 'photo-item';
+        div.innerHTML = `<img src="${photo.src}" alt=""><p>${photo.caption}</p>`;
+        container.appendChild(div);
+      });
+    }
+
+    function handlePhotoUpload(event) {
+      event.preventDefault();
+      const file = document.getElementById('upload-file').files[0];
+      const caption = document.getElementById('upload-caption').value;
+      const category = document.getElementById('upload-category').value;
+      if (!file || !caption || !category) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        photos.push({ src: e.target.result, caption, category });
+        renderGallery();
+        document.getElementById('upload-form').reset();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    window.onload = () => showSection('bio');
+  </script>
+</head>
+<body>
+  <nav>
+    <a onclick="showSection('bio')">Home</a>
+    <a onclick="showSection('gallery')">Gallery</a>
+    <a onclick="showSection('contact')">Contact</a>
+    <a onclick="showSection('feedback')">Feedback</a>
+    <a onclick="showSection('checkout')">Buy a Print</a>
+  </nav>
+
+  <header>
+    <h1>Olivia Daly's Amazing Photography</h1>
+  </header>
+
+  <section id="bio" class="bio-box">
+    <h2>About Olivia Daly</h2>
+    <p>[Write your paragraph here about Olivia Daly, her passion for photography, and why she loves airplanes!]</p>
+  </section>
+
+  <section id="gallery" class="gallery">
+    <div class="gallery-controls">
+      <select id="filter-category" onchange="renderGallery()">
+        <option value="all">All</option>
+        <option value="planes">Planes</option>
+        <option value="scenery">Scenery</option>
+        <option value="animals">Animals</option>
+      </select>
+      <input type="text" id="search-box" placeholder="Search captions..." oninput="renderGallery()">
+    </div>
+    <form id="upload-form" onsubmit="handlePhotoUpload(event)">
+      <input type="file" id="upload-file" accept="image/*" required>
+      <input type="text" id="upload-caption" placeholder="Caption" required>
+      <select id="upload-category" required>
+        <option value="">Select Category</option>
+        <option value="planes">Planes</option>
+        <option value="scenery">Scenery</option>
+        <option value="animals">Animals</option>
+      </select>
+      <button type="submit">Upload Photo</button>
+    </form>
+    <div id="photo-grid" class="photo-grid"></div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2>Contact Olivia</h2>
+    <p>Email: <a href="mailto:oliviadaly@email.com">oliviadaly@email.com</a></p>
+    <p>Phone: 01234 567890</p>
+  </section>
+
+  <section id="feedback" class="feedback">
+    <h2>Leave Feedback</h2>
+    <form>
+      <input type="text" placeholder="Your Name" required />
+      <textarea placeholder="Your Feedback" rows="4" required></textarea>
+      <button type="submit">Submit Feedback</button>
+    </form>
+  </section>
+
+  <section id="checkout" class="checkout">
+    <h2>Buy a Print</h2>
+    <form>
+      <input type="text" placeholder="Full Name" required />
+      <input type="text" placeholder="Shipping Address" required />
+      <select>
+        <option value="print1">Airplane Print 1 - £10</option>
+        <option value="print2">Airplane Print 2 - £10</option>
+        <option value="print3">Airplane Print 3 - £10</option>
+      </select>
+      <button type="submit">Checkout</button>
+    </form>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Olivia Daly Photography | <a href="mailto:oliviadaly@email.com">Email Olivia</a></p>
+  </footer>
+</body>
+</html>
