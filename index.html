@@ -4,19 +4,21 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Olivia Daly Photography</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
   <script>
     const photos = [
-      { src: 'plane1.jpg', caption: 'Jet flying at sunset', category: 'planes' },
-      { src: 'plane2.jpg', caption: 'Vintage aircraft at airshow', category: 'planes' },
-      { src: 'scene1.jpg', caption: 'Mountain view sunrise', category: 'scenery' },
-      { src: 'animal1.jpg', caption: 'Tiger in the wild', category: 'animals' },
-      { src: 'scene2.jpg', caption: 'Lake and forest reflection', category: 'scenery' },
-      { src: 'animal2.jpg', caption: 'Bird perched on a branch', category: 'animals' }
+      { src: 'images/plane1.jpg', caption: 'Jet flying at sunset', category: 'planes' },
+      { src: 'images/plane2.jpg', caption: 'Vintage aircraft at airshow', category: 'planes' },
+      { src: 'images/scene1.jpg', caption: 'Mountain view sunrise', category: 'scenery' },
+      { src: 'images/animal1.jpg', caption: 'Tiger in the wild', category: 'animals' },
+      { src: 'images/scene2.jpg', caption: 'Lake and forest reflection', category: 'scenery' },
+      { src: 'images/animal2.jpg', caption: 'Bird perched on a branch', category: 'animals' }
     ];
 
     function showSection(id) {
-      document.querySelectorAll('.bio-box, .gallery, .contact, .feedback, .checkout').forEach(sec => sec.style.display = 'none');
+      document.querySelectorAll('.bio-box, .gallery, .contact, .feedback, .checkout').forEach(sec => {
+        sec.style.display = 'none';
+      });
       document.getElementById(id).style.display = 'block';
       if (id === 'gallery') renderGallery();
     }
@@ -26,30 +28,23 @@
       const category = document.getElementById('filter-category').value;
       const search = document.getElementById('search-box').value.toLowerCase();
       container.innerHTML = '';
+
       photos.filter(photo => {
-        return (category === 'all' || photo.category === category) && photo.caption.toLowerCase().includes(search);
+        return (category === 'all' || photo.category === category) &&
+               photo.caption.toLowerCase().includes(search);
       }).forEach(photo => {
         const div = document.createElement('div');
         div.className = 'photo-item';
-        div.innerHTML = `<img src="${photo.src}" alt=""><p>${photo.caption}</p>`;
+        div.innerHTML = `
+          <img src="${photo.src}" alt="${photo.caption}">
+          <p>${photo.caption}</p>
+        `;
         container.appendChild(div);
       });
-    }
 
-    function handlePhotoUpload(event) {
-      event.preventDefault();
-      const file = document.getElementById('upload-file').files[0];
-      const caption = document.getElementById('upload-caption').value;
-      const category = document.getElementById('upload-category').value;
-      if (!file || !caption || !category) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        photos.push({ src: e.target.result, caption, category });
-        renderGallery();
-        document.getElementById('upload-form').reset();
-      };
-      reader.readAsDataURL(file);
+      if(container.innerHTML === '') {
+        container.innerHTML = '<p>No photos match your search.</p>';
+      }
     }
 
     window.onload = () => showSection('bio');
@@ -81,19 +76,14 @@
         <option value="scenery">Scenery</option>
         <option value="animals">Animals</option>
       </select>
-      <input type="text" id="search-box" placeholder="Search captions..." oninput="renderGallery()">
+      <input
+        type="text"
+        id="search-box"
+        placeholder="Search captions..."
+        oninput="renderGallery()"
+      />
     </div>
-    <form id="upload-form" onsubmit="handlePhotoUpload(event)">
-      <input type="file" id="upload-file" accept="image/*" required>
-      <input type="text" id="upload-caption" placeholder="Caption" required>
-      <select id="upload-category" required>
-        <option value="">Select Category</option>
-        <option value="planes">Planes</option>
-        <option value="scenery">Scenery</option>
-        <option value="animals">Animals</option>
-      </select>
-      <button type="submit">Upload Photo</button>
-    </form>
+
     <div id="photo-grid" class="photo-grid"></div>
   </section>
 
@@ -127,7 +117,10 @@
   </section>
 
   <footer>
-    <p>&copy; 2025 Olivia Daly Photography | <a href="mailto:oliviadaly@email.com">Email Olivia</a></p>
+    <p>
+      &copy; 2025 Olivia Daly Photography |
+      <a href="mailto:oliviadaly@email.com">Email Olivia</a>
+    </p>
   </footer>
 </body>
 </html>
